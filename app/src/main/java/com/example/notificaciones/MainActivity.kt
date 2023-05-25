@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 
 class MainActivity : AppCompatActivity() {
 
@@ -47,21 +48,26 @@ class MainActivity : AppCompatActivity() {
     {
 
         val intent = Intent(this, MainActivity::class.java).apply {
+            //No se crean muchas aplicaciones de golpe, no crea instancias nuevas en la app
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
 
         val flag = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, flag)
+        val pendingIntent:PendingIntent = PendingIntent.getActivity(this, 0, intent, flag)
 
         var builder = NotificationCompat.Builder(this, MY_CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_delete)
-            .setContentTitle("My title")
-            .setContentText("Esto es un ejemplo <3")
+            .setContentTitle("1 Mensaje de Antonio")
+            .setContentText("Mensaje de Antonio")
             .setStyle(
                 NotificationCompat.BigTextStyle()
-                    .bigText("Holita holi Holita holi Holita holi Holita holi Holita holi Holita holi Holita holi Holita holi Holita holi Holita holi Holita holi Holita holi Holita holi ")
+                    .bigText("Hola esto es un mensaje de prueba, saludos ")
             )
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+        with(NotificationManagerCompat.from(this)) {
+            notify(1, builder.build())
+        }
     }
 }
