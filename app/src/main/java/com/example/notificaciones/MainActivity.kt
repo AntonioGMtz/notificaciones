@@ -9,6 +9,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 
@@ -16,11 +17,13 @@ class MainActivity : AppCompatActivity() {
 
     companion object{
         const val MY_CHANNEL_ID = "myChannel"
+
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val myNotificationButton = findViewById<Button>(R.id.btnNotification)
+
         createChannel()
         myNotificationButton.setOnClickListener {
             createSimpleNotification()
@@ -46,12 +49,13 @@ class MainActivity : AppCompatActivity() {
 
     fun createSimpleNotification()
     {
-
+        val myTextMessage = findViewById<EditText>(R.id.txMessage)
         val intent = Intent(this, MainActivity::class.java).apply {
             //No se crean muchas aplicaciones de golpe, no crea instancias nuevas en la app
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
 
+        val text = myTextMessage.text.toString()
         val flag = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
         val pendingIntent:PendingIntent = PendingIntent.getActivity(this, 0, intent, flag)
 
@@ -61,7 +65,7 @@ class MainActivity : AppCompatActivity() {
             .setContentText("Mensaje de Antonio")
             .setStyle(
                 NotificationCompat.BigTextStyle()
-                    .bigText("Hola esto es un mensaje de prueba, saludos ")
+                    .bigText(text.toString())
             )
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
